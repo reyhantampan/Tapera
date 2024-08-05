@@ -393,7 +393,7 @@ elif options == "🔄 Preprocessing":
                 data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
                 st.session_state.translate_text = data_translate
                 st.write("**Setelah Translate:**")
-                st.write(st.session_state.translate_text.head())
+                st.write(st.session_state.translate_text)
 
 
 # Halaman: Prediksi
