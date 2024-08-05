@@ -384,14 +384,17 @@ elif options == "🔄 Preprocessing":
             st.subheader("Sebelum dan Sesudah Translate")
             st.write("**Sebelum Translate:**")
             st.write(st.session_state.stemming_text.head())
+            
             if st.button("Translate"):
-                # Memuat dan menampilkan data hasil translasi dari file Excel
+                # Memuat dan menampilkan data hasil translasi dari file CSV
                 data_translate = pd.read_csv('data/hasillabelling.csv')
-                data_translate = data_translate['tweet_english', 'sentiment']
-                data_translate = data_translate['tweet_english'].apply(casefolding)
+                # Mengakses kolom 'tweet_english' dan 'sentiment'
+                data_translate = data_translate[['tweet_english', 'sentiment']]
+                data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
                 st.session_state.translate_text = data_translate
                 st.write("**Setelah Translate:**")
                 st.write(st.session_state.translate_text.head())
+
 
 # Halaman: Prediksi
 elif options == "🔍 Prediksi":
