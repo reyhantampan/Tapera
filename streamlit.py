@@ -156,7 +156,7 @@ def classify_text(text, vectorizer, model):
 
 # Sidebar untuk navigasi
 st.sidebar.title("Navigasi")
-options = st.sidebar.radio("Pergi ke", ["🏠 Halaman Utama", "📊 Eksplorasi Data", "🔄 Preprocessing", "🔍 Prediksi", "📝 Kesimpulan", "🈯 Translate"])
+options = st.sidebar.radio("Pergi ke", ["🏠 Halaman Utama", "📊 Eksplorasi Data", "🔄 Preprocessing",  "🈯 Translate", "🔍 Prediksi", "📝 Kesimpulan"])
 
 # Menambahkan CSS untuk justify text dan margin pada informasi penulis
 st.markdown(
