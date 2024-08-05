@@ -156,7 +156,7 @@ def classify_text(text, vectorizer, model):
 
 # Sidebar untuk navigasi
 st.sidebar.title("Navigasi")
-options = st.sidebar.radio("Pergi ke", ["🏠 Halaman Utama", "📊 Eksplorasi Data", "🔄 Preprocessing", "🔍 Prediksi", "📝 Kesimpulan"])
+options = st.sidebar.radio("Pergi ke", ["🏠 Halaman Utama", "📊 Eksplorasi Data", "🔄 Preprocessing", "🔍 Prediksi", "📝 Kesimpulan", "🈯 Translate"])
 
 # Menambahkan CSS untuk justify text dan margin pada informasi penulis
 st.markdown(
@@ -384,16 +384,29 @@ elif options == "🔄 Preprocessing":
             st.subheader("Sebelum dan Sesudah Translate")
             st.write("**Sebelum Translate:**")
             st.write(st.session_state.stemming_text.head())
-            
-            if st.button("Translate"):
-                # Memuat dan menampilkan data hasil translasi dari file CSV
-                data_translate = pd.read_csv('data/hasillabelling.csv')
-                # Mengakses kolom 'tweet_english' dan 'sentiment'
-                data_translate = data_translate[['tweet_english', 'sentiment']]
-                data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
-                st.session_state.translate_text = data_translate
-                st.write("**Setelah Translate:**")
-                st.write(st.session_state.translate_text)
+
+# Halaman: Translate
+elif options == "🈯 Translate":
+    st.header("Translate Data")
+
+    st.write("Unggah data Anda dan lakukan langkah-langkah preprocessing teks.")
+
+    # Unggah data
+    uploaded_file = st.file_uploader("Pilih file CSV", type="csv")
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        st.write("Data yang Diunggah:")
+        st.write(data.head())
+
+        if st.button("Translate"):
+            # Memuat dan menampilkan data hasil translasi dari file CSV
+            data_translate = pd.read_csv('data/hasillabelling.csv')
+            # Mengakses kolom 'tweet_english' dan 'sentiment'
+            data_translate = data_translate[['tweet_english', 'sentiment']]
+            data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
+            st.session_state.translate_text = data_translate
+            st.write("**Setelah Translate:**")
+            st.write(st.session_state.translate_text)
 
 
 # Halaman: Prediksi
