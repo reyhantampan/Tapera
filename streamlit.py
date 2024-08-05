@@ -386,7 +386,7 @@ elif options == "🔄 Preprocessing":
             st.write(st.session_state.stemming_text.head())
             if st.button("Translate"):
                 # Memuat dan menampilkan data hasil translasi dari file Excel
-                data_translate = pd.read_csv('data/Translate.csv')
+                data_translate = pd.read_csv('data/hasillabelling.csv')
                 data_translate = data_translate['tweet_english', 'sentiment']
                 data_translate = data_translate['tweet_english'].apply(casefolding)
                 st.session_state.translate_text = data_translate
