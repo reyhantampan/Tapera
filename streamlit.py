@@ -442,17 +442,12 @@ elif options == "🔍 Prediksi":
                 st.session_state.stemming_text = stemming(st.session_state.tokenize_text)
             st.write("**Setelah Stemming:**")
             st.write(st.session_state.stemming_text)
-            
-        if st.session_state.tokenize_text:
-            if st.button("Stemming"):
-                st.session_state.stemming_text = stemming(st.session_state.tokenize_text)
-            st.write("**Setelah Stemming:**")
-            st.write(st.session_state.stemming_text)
 
     if st.button("Prediksi dengan SVM"):
         preprocessed_text, svm_result = classify_text(user_input.strip(), tfidf, svm_model)
         st.write("**Prediksi SVM:**")
         st.write(svm_result)
+        
     if st.button("Prediksi dengan Naive Bayes"):
         preprocessed_text, nb_result = classify_text(user_input.strip(), tfidf, nb_model)
         st.write("**Prediksi Naive Bayes:**")
