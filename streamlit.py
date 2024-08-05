@@ -375,7 +375,7 @@ elif options == "🔄 Preprocessing":
             st.write(st.session_state.tokenize_text.head())
             if st.button("Stemming"):
                 # Memuat dan menampilkan data hasil stemming dari file Excel
-                data_stemming = pd.read_excel('data/Clean_Data.xlsx')
+                data_stemming = pd.read_csv('data/Clean_Data.csv')
                 st.session_state.stemming_text = data_stemming
                 st.write("**Setelah Stemming:**")
                 st.write(st.session_state.stemming_text.head())
