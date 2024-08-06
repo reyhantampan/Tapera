@@ -312,7 +312,7 @@ uploaded_file = st.file_uploader("Pilih file CSV", type="csv")
 if uploaded_file is not None:
     try:
         # Try reading the file with the default encoding (UTF-8)
-        data = pd.read_csv(uploaded_file)
+        data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
         st.write("Data yang Diunggah (dengan encoding default):")
         st.write(data.head())
         
