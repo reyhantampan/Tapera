@@ -400,9 +400,9 @@ elif options == "🈯 Translate":
 
         if st.button("Translate"):
             # Memuat dan menampilkan data hasil translasi dari file CSV
-            data_translate = pd.read_csv('data/hasillabelling.csv')
+            data_translate = pd.read_csv('data/Translate.csv')
             # Mengakses kolom 'tweet_english' dan 'sentiment'
-            data_translate = data_translate[['tweet_english', 'sentiment']]
+            data_translate = data_translate[['tweet_english']]
             data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
             st.session_state.translate_text = data_translate
             st.write("**Setelah Translate:**")
