@@ -306,12 +306,12 @@ elif options == "🔄 Preprocessing":
     st.header("Langkah Preprocessing")
     st.write("Unggah data Anda dan lakukan langkah-langkah preprocessing teks.")
 
-   # File uploader for CSV files
-uploaded_file = st.file_uploader("Pilih file CSV", type="csv")
-if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file)
-    st.write("Data yang Diunggah:")
-    st.write(data.head())
+     # Unggah data
+    uploaded_file = st.file_uploader("Pilih file CSV", type="csv")
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        st.write("Data yang Diunggah:")
+        st.write(data.head())
         
         # Pilih kolom untuk preprocessing
         column = st.selectbox("Pilih kolom untuk preprocessing", data.columns)
