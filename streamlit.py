@@ -306,12 +306,24 @@ elif options == "🔄 Preprocessing":
     st.header("Langkah Preprocessing")
     st.write("Unggah data Anda dan lakukan langkah-langkah preprocessing teks.")
 
-    # Unggah data
-    uploaded_file = st.file_uploader("Pilih file CSV", type="csv")
-    if uploaded_file is not None:
+    File uploader for CSV files
+uploaded_file = st.file_uploader("Pilih file CSV", type="csv")
+
+if uploaded_file is not None:
+    try:
+        # Try reading the file with the default encoding (UTF-8)
         data = pd.read_csv(uploaded_file)
-        st.write("Data yang Diunggah:")
+        st.write("Data yang Diunggah (dengan encoding default):")
         st.write(data.head())
+    except UnicodeDecodeError:
+        # If there's a UnicodeDecodeError, try reading with a different encoding
+        st.error("Gagal membaca file dengan encoding default (UTF-8). Mencoba dengan encoding 'ISO-8859-1'.")
+        uploaded_file.seek(0)  # Reset the file pointer to the beginning
+        data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+        st.write("Data yang Diunggah (dengan encoding 'ISO-8859-1'):")
+        st.write(data.head())
+    except Exception as e:
+        st.error(f"Terjadi kesalahan: {e}")
         
         # Pilih kolom untuk preprocessing
         column = st.selectbox("Pilih kolom untuk preprocessing", data.columns)
