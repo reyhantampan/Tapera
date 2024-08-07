@@ -30,21 +30,13 @@ def casefolding(text):
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
-# Memuat kunci normalisasi
-try:
-    key_norm = pd.read_csv('data/key_norm.csv', encoding='latin1')
-except UnicodeDecodeError:
-    key_norm = pd.read_csv('data/key_norm.csv', encoding='ISO-8859-1')
+# Memuat kunci normalisasi dan membentuk dictionary
+key_norm = pd.read_csv('data/key_norm.csv', encoding='latin1')
+norm_dict = pd.Series(key_norm.hasil.values, index=key_norm.singkat).to_dict()
 
 def text_normalize(text):
     words = text.split()
-    normalized_words = []
-    for word in words:
-        if (key_norm['singkat'] == word).any():
-            normalized_word = key_norm[key_norm['singkat'] == word]['hasil'].values[0]
-            normalized_words.append(normalized_word)
-        else:
-            normalized_words.append(word)
+    normalized_words = [norm_dict.get(word, word) for word in words]
     return ' '.join(normalized_words)
 
 # Stopwords dalam bahasa Indonesia
@@ -311,7 +303,7 @@ elif options == "🔄 Preprocessing":
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
         st.write("Data yang Diunggah:")
-        st.write(data.head())
+        st.write(data.head(10))
         
         # Pilih kolom untuk preprocessing
         column = st.selectbox("Pilih kolom untuk preprocessing", data.columns)
@@ -333,57 +325,57 @@ elif options == "🔄 Preprocessing":
 
         st.subheader("Sebelum dan Sesudah Case Folding")
         st.write("**Sebelum Case Folding:**")
-        st.write(data[column].head())
+        st.write(data[column].head(10))
 
         if st.button("Case Folding"):
             st.session_state.casefolding_text = data[column].apply(casefolding)
             st.write("**Setelah Case Folding:**")
-            st.write(st.session_state.casefolding_text.head())
+            st.write(st.session_state.casefolding_text.head(10))
 
         if st.session_state.casefolding_text is not None:
             st.subheader("Sebelum dan Sesudah Normalisasi Teks")
             st.write("**Sebelum Normalisasi Teks:**")
-            st.write(st.session_state.casefolding_text.head())
+            st.write(st.session_state.casefolding_text.head(10))
             if st.button("Normalisasi Teks"):
                 st.session_state.normalisasi_text = st.session_state.casefolding_text.apply(text_normalize)
                 st.write("**Setelah Normalisasi Teks:**")
-                st.write(st.session_state.normalisasi_text.head())
+                st.write(st.session_state.normalisasi_text.head(10))
 
         if st.session_state.normalisasi_text is not None:
             st.subheader("Sebelum dan Sesudah Menghapus Stop Word")
             st.write("**Sebelum Menghapus Stop Word:**")
-            st.write(st.session_state.normalisasi_text.head())
+            st.write(st.session_state.normalisasi_text.head(10))
             if st.button("Menghapus Stop Word"):
                 st.session_state.remove_text = st.session_state.normalisasi_text.apply(remove_stop_word)
                 st.write("**Setelah Menghapus Stop Word:**")
-                st.write(st.session_state.remove_text.head())
+                st.write(st.session_state.remove_text.head(10))
 
         if st.session_state.remove_text is not None:
             st.subheader("Sebelum dan Sesudah Tokenisasi")
             st.write("**Sebelum Tokenisasi:**")
-            st.write(st.session_state.remove_text.head())
+            st.write(st.session_state.remove_text.head(10))
             if st.button("Tokenisasi"):
                 st.session_state.tokenize_text = st.session_state.remove_text.apply(tokenizing)
                 # Gabungkan token kembali menjadi string untuk langkah berikutnya
                 st.session_state.tokenize_text = st.session_state.tokenize_text.apply(lambda x: ' '.join(x))
                 st.write("**Setelah Tokenisasi:**")
-                st.write(st.session_state.tokenize_text.head())
+                st.write(st.session_state.tokenize_text.head(10))
 
         if st.session_state.tokenize_text is not None:
             st.subheader("Sebelum dan Sesudah Stemming")
             st.write("**Sebelum Stemming:**")
-            st.write(st.session_state.tokenize_text.head())
+            st.write(st.session_state.tokenize_text.head(10))
             if st.button("Stemming"):
                 # Memuat dan menampilkan data hasil stemming dari file Excel
                 data_stemming = pd.read_csv('data/Clean_Data.csv')
                 st.session_state.stemming_text = data_stemming
                 st.write("**Setelah Stemming:**")
-                st.write(st.session_state.stemming_text.head())
+                st.write(st.session_state.stemming_text.head(10))
                 
         if st.session_state.stemming_text is not None:
             st.subheader("Sebelum dan Sesudah Translate")
             st.write("**Sebelum Translate:**")
-            st.write(st.session_state.stemming_text.head())
+            st.write(st.session_state.stemming_text.head(10))
 
 # Halaman: Translate
 elif options == "🈯 Translate":
