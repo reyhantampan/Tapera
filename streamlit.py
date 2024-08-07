@@ -311,7 +311,7 @@ elif options == "🔄 Preprocessing":
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
         st.write("Data yang Diunggah:")
-        st.write(data.head())
+        st.write(data.head(100))  # Menampilkan 100 baris pertama data
         
         # Pilih kolom untuk preprocessing
         column = st.selectbox("Pilih kolom untuk preprocessing", data.columns)
@@ -333,57 +333,57 @@ elif options == "🔄 Preprocessing":
 
         st.subheader("Sebelum dan Sesudah Case Folding")
         st.write("*Sebelum Case Folding:*")
-        st.write(data[column].head())
+        st.write(data[column].head(100))  # Menampilkan 100 baris pertama data
 
         if st.button("Case Folding"):
             st.session_state.casefolding_text = data[column].apply(casefolding)
             st.write("*Setelah Case Folding:*")
-            st.write(st.session_state.casefolding_text.head())
+            st.write(st.session_state.casefolding_text.head(100))  # Menampilkan 100 baris pertama data
 
         if st.session_state.casefolding_text is not None:
             st.subheader("Sebelum dan Sesudah Normalisasi Teks")
             st.write("*Sebelum Normalisasi Teks:*")
-            st.write(st.session_state.casefolding_text.head())
+            st.write(st.session_state.casefolding_text.head(100))  # Menampilkan 100 baris pertama data
             if st.button("Normalisasi Teks"):
                 st.session_state.normalisasi_text = st.session_state.casefolding_text.apply(text_normalize)
                 st.write("*Setelah Normalisasi Teks:*")
-                st.write(st.session_state.normalisasi_text.head())
+                st.write(st.session_state.normalisasi_text.head(100))  # Menampilkan 100 baris pertama data
 
         if st.session_state.normalisasi_text is not None:
             st.subheader("Sebelum dan Sesudah Menghapus Stop Word")
             st.write("*Sebelum Menghapus Stop Word:*")
-            st.write(st.session_state.normalisasi_text.head())
+            st.write(st.session_state.normalisasi_text.head(100))  # Menampilkan 100 baris pertama data
             if st.button("Menghapus Stop Word"):
                 st.session_state.remove_text = st.session_state.normalisasi_text.apply(remove_stop_word)
                 st.write("*Setelah Menghapus Stop Word:*")
-                st.write(st.session_state.remove_text.head())
+                st.write(st.session_state.remove_text.head(100))  # Menampilkan 100 baris pertama data
 
         if st.session_state.remove_text is not None:
             st.subheader("Sebelum dan Sesudah Tokenisasi")
             st.write("*Sebelum Tokenisasi:*")
-            st.write(st.session_state.remove_text.head())
+            st.write(st.session_state.remove_text.head(100))  # Menampilkan 100 baris pertama data
             if st.button("Tokenisasi"):
                 st.session_state.tokenize_text = st.session_state.remove_text.apply(tokenizing)
                 # Gabungkan token kembali menjadi string untuk langkah berikutnya
                 st.session_state.tokenize_text = st.session_state.tokenize_text.apply(lambda x: ' '.join(x))
                 st.write("*Setelah Tokenisasi:*")
-                st.write(st.session_state.tokenize_text.head())
+                st.write(st.session_state.tokenize_text.head(100))  # Menampilkan 100 baris pertama data
 
         if st.session_state.tokenize_text is not None:
             st.subheader("Sebelum dan Sesudah Stemming")
             st.write("*Sebelum Stemming:*")
-            st.write(st.session_state.tokenize_text.head())
+            st.write(st.session_state.tokenize_text.head(100))  # Menampilkan 100 baris pertama data
             if st.button("Stemming"):
                 # Memuat dan menampilkan data hasil stemming dari file Excel
                 data_stemming = pd.read_csv('data/Clean_Data.csv')
                 st.session_state.stemming_text = data_stemming
                 st.write("*Setelah Stemming:*")
-                st.write(st.session_state.stemming_text.head())
+                st.write(st.session_state.stemming_text.head(100))  # Menampilkan 100 baris pertama data
                 
         if st.session_state.stemming_text is not None:
             st.subheader("Sebelum dan Sesudah Translate")
             st.write("*Sebelum Translate:*")
-            st.write(st.session_state.stemming_text.head())
+            st.write(st.session_state.stemming_text.head(100))  # Menampilkan 100 baris pertama data
 
 # Halaman: Translate
 elif options == "🈯 Translate":
@@ -396,7 +396,7 @@ elif options == "🈯 Translate":
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
         st.write("Data yang Diunggah:")
-        st.write(data.head())
+        st.write(data.head(100))  # Menampilkan 100 baris pertama data
 
         if st.button("Translate"):
             # Memuat dan menampilkan data hasil translasi dari file CSV
@@ -406,7 +406,7 @@ elif options == "🈯 Translate":
             data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
             st.session_state.translate_text = data_translate
             st.write("*Setelah Translate:*")
-            st.write(st.session_state.translate_text)
+            st.write(st.session_state.translate_text.head(100))  # Menampilkan 100 baris pertama data
 
 
 # Halaman: Prediksi
