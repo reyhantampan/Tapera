@@ -332,57 +332,57 @@ elif options == "🔄 Preprocessing":
             st.session_state.translate_text = None
 
         st.subheader("Sebelum dan Sesudah Case Folding")
-        st.write("**Sebelum Case Folding:**")
+        st.write("*Sebelum Case Folding:*")
         st.write(data[column].head())
 
         if st.button("Case Folding"):
             st.session_state.casefolding_text = data[column].apply(casefolding)
-            st.write("**Setelah Case Folding:**")
+            st.write("*Setelah Case Folding:*")
             st.write(st.session_state.casefolding_text.head())
 
         if st.session_state.casefolding_text is not None:
             st.subheader("Sebelum dan Sesudah Normalisasi Teks")
-            st.write("**Sebelum Normalisasi Teks:**")
+            st.write("*Sebelum Normalisasi Teks:*")
             st.write(st.session_state.casefolding_text.head())
             if st.button("Normalisasi Teks"):
                 st.session_state.normalisasi_text = st.session_state.casefolding_text.apply(text_normalize)
-                st.write("**Setelah Normalisasi Teks:**")
+                st.write("*Setelah Normalisasi Teks:*")
                 st.write(st.session_state.normalisasi_text.head())
 
         if st.session_state.normalisasi_text is not None:
             st.subheader("Sebelum dan Sesudah Menghapus Stop Word")
-            st.write("**Sebelum Menghapus Stop Word:**")
+            st.write("*Sebelum Menghapus Stop Word:*")
             st.write(st.session_state.normalisasi_text.head())
             if st.button("Menghapus Stop Word"):
                 st.session_state.remove_text = st.session_state.normalisasi_text.apply(remove_stop_word)
-                st.write("**Setelah Menghapus Stop Word:**")
+                st.write("*Setelah Menghapus Stop Word:*")
                 st.write(st.session_state.remove_text.head())
 
         if st.session_state.remove_text is not None:
             st.subheader("Sebelum dan Sesudah Tokenisasi")
-            st.write("**Sebelum Tokenisasi:**")
+            st.write("*Sebelum Tokenisasi:*")
             st.write(st.session_state.remove_text.head())
             if st.button("Tokenisasi"):
                 st.session_state.tokenize_text = st.session_state.remove_text.apply(tokenizing)
                 # Gabungkan token kembali menjadi string untuk langkah berikutnya
                 st.session_state.tokenize_text = st.session_state.tokenize_text.apply(lambda x: ' '.join(x))
-                st.write("**Setelah Tokenisasi:**")
+                st.write("*Setelah Tokenisasi:*")
                 st.write(st.session_state.tokenize_text.head())
 
         if st.session_state.tokenize_text is not None:
             st.subheader("Sebelum dan Sesudah Stemming")
-            st.write("**Sebelum Stemming:**")
+            st.write("*Sebelum Stemming:*")
             st.write(st.session_state.tokenize_text.head())
             if st.button("Stemming"):
                 # Memuat dan menampilkan data hasil stemming dari file Excel
                 data_stemming = pd.read_csv('data/Clean_Data.csv')
                 st.session_state.stemming_text = data_stemming
-                st.write("**Setelah Stemming:**")
+                st.write("*Setelah Stemming:*")
                 st.write(st.session_state.stemming_text.head())
                 
         if st.session_state.stemming_text is not None:
             st.subheader("Sebelum dan Sesudah Translate")
-            st.write("**Sebelum Translate:**")
+            st.write("*Sebelum Translate:*")
             st.write(st.session_state.stemming_text.head())
 
 # Halaman: Translate
@@ -405,7 +405,7 @@ elif options == "🈯 Translate":
             data_translate = data_translate[['tweet_english']]
             data_translate['tweet_english'] = data_translate['tweet_english'].apply(casefolding)
             st.session_state.translate_text = data_translate
-            st.write("**Setelah Translate:**")
+            st.write("*Setelah Translate:*")
             st.write(st.session_state.translate_text)
 
 
@@ -430,19 +430,19 @@ elif options == "🔍 Prediksi":
     if user_input:
         if st.button("Case Folding"):
             st.session_state.casefolding_text = casefolding(user_input)
-        st.write("**Setelah Case Folding:**")
+        st.write("*Setelah Case Folding:*")
         st.write(st.session_state.casefolding_text)
         
         if st.session_state.casefolding_text:
             if st.button("Normalisasi Teks"):
                 st.session_state.normalisasi_text = text_normalize(st.session_state.casefolding_text)
-            st.write("**Setelah Normalisasi Teks:**")
+            st.write("*Setelah Normalisasi Teks:*")
             st.write(st.session_state.normalisasi_text)
 
         if st.session_state.normalisasi_text:
             if st.button("Menghapus Stop Word"):
                 st.session_state.remove_text = remove_stop_word(st.session_state.normalisasi_text)
-            st.write("**Setelah Menghapus Stop Word:**")
+            st.write("*Setelah Menghapus Stop Word:*")
             st.write(st.session_state.remove_text)
 
         if st.session_state.remove_text:
@@ -450,23 +450,23 @@ elif options == "🔍 Prediksi":
                 st.session_state.tokenize_text = tokenizing(st.session_state.remove_text)
                 # Gabungkan token kembali menjadi string untuk langkah berikutnya
                 st.session_state.tokenize_text = ' '.join(st.session_state.tokenize_text)
-            st.write("**Setelah Tokenisasi:**")
+            st.write("*Setelah Tokenisasi:*")
             st.write(st.session_state.tokenize_text)
 
         if st.session_state.tokenize_text:
             if st.button("Stemming"):
                 st.session_state.stemming_text = stemming(st.session_state.tokenize_text)
-            st.write("**Setelah Stemming:**")
+            st.write("*Setelah Stemming:*")
             st.write(st.session_state.stemming_text)
 
     if st.button("Prediksi dengan SVM"):
         preprocessed_text, svm_result = classify_text(user_input.strip(), tfidf, svm_model)
-        st.write("**Prediksi SVM:**")
+        st.write("*Prediksi SVM:*")
         st.write(svm_result)
         
     if st.button("Prediksi dengan Naive Bayes"):
         preprocessed_text, nb_result = classify_text(user_input.strip(), tfidf, nb_model)
-        st.write("**Prediksi Naive Bayes:**")
+        st.write("*Prediksi Naive Bayes:*")
         st.write(nb_result)
         
 # Halaman: Kesimpulan
@@ -518,10 +518,10 @@ elif options == "📝 Kesimpulan":
     # Menampilkan hasil evaluasi SVM
     st.subheader("Hasil Evaluasi SVM")
     st.markdown("""
-    - **Accuracy**: 0.8821
-    - **Precision**: 0.8849
-    - **Recall**: 0.8821
-    - **F1 Score**: 0.8820
+    - *Accuracy*: 0.8821
+    - *Precision*: 0.8849
+    - *Recall*: 0.8821
+    - *F1 Score*: 0.8820
     """)
 
     svm_report = """
@@ -539,10 +539,10 @@ elif options == "📝 Kesimpulan":
     # Menampilkan hasil evaluasi Naive Bayes
     st.subheader("Hasil Evaluasi Naive Bayes")
     st.markdown("""
-    - **Accuracy**: 0.8471
-    - **Precision**: 0.8550
-    - **Recall**: 0.8471
-    - **F1 Score**: 0.8460
+    - *Accuracy*: 0.8471
+    - *Precision*: 0.8550
+    - *Recall*: 0.8471
+    - *F1 Score*: 0.8460
     """)
 
     nb_report = """
