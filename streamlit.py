@@ -14,8 +14,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from wordcloud import WordCloud
 from sklearn.metrics import confusion_matrix
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from googletrans import Translator
 
 # Download NLTK stopwords
 nltk.download('stopwords')
@@ -156,42 +154,9 @@ def classify_text(text, vectorizer, model):
     prediction = model.predict(text_tfidf)[0]
     return preprocessed_text, prediction
 
-# Inisiasi VADER sentiment analyzer
-sid = SentimentIntensityAnalyzer()
-
-# Tambahan kata-kata positif dan negatif ke kamus VADER
-additional_pos_words = [
-     'savings', 'give', 'choose', 'home', 'community', 'job', 
-    'working', 'life', 'minister', 'society', 'team', 'invest', 'investors'
-]
-
-additional_neg_words = [
-    'gambling', 'corruption', 'taxes', 'issue', 'orders', 'out', 'viral', 
-    'cost', 'force', 'police', 'afraid', 'used', 'dynasty', 'afraid', 'corruption'
-]
-
-# Menambahkan kata-kata dengan skor ke kamus VADER
-for word in additional_pos_words:
-    sid.lexicon[word] = 2.0  # Nilai positif tinggi untuk kata positif
-
-for word in additional_neg_words:
-    sid.lexicon[word] = -2.0  # Nilai negatif tinggi untuk kata negatif
-
-def vader_sentiment(text):
-    scores = sid.polarity_scores(text)
-    if scores['compound'] >= 0.01:
-        return 'positive'
-    else:
-        return 'negative'
-    
-def translate_text(text, src='id', dest='en'):
-    translator = Translator()
-    translation = translator.translate(text, src=src, dest=dest)
-    return translation.text
-
 # Sidebar untuk navigasi
 st.sidebar.title("Navigasi")
-options = st.sidebar.radio("Pergi ke", ["🏠 Halaman Utama", "📊 Eksplorasi Data", "🔄 Preprocessing",  "🈯 Translate", "🧠 Labeling", "🔍 Prediksi", "📝 Kesimpulan"])
+options = st.sidebar.radio("Pergi ke", ["🏠 Halaman Utama", "📊 Eksplorasi Data", "🔄 Preprocessing",  "🈯 Translate", "🔍 Prediksi", "📝 Kesimpulan"])
 
 # Menambahkan CSS untuk justify text dan margin pada informasi penulis
 st.markdown(
@@ -629,50 +594,3 @@ elif options == "📝 Kesimpulan":
     sns.barplot(x='tfidf', y='terms', data=top_terms_negative, palette='Reds_r')
     plt.title('Top 20 Negative Terms dengan Bobot TF-IDF Tertinggi')
     st.pyplot(plt)
-
-# Halaman: Labeling
-elif options == "🧠 Labeling":
-    st.header("Analisis Sentimen Menggunakan VADER")
-
-    # Penjelasan tentang proses pelabelan
-    st.markdown("""
-    <div class="justified-text">
-    <strong>Proses Pelabelan:</strong>
-    <br>Pelabelan sentimen adalah proses mengkategorikan teks ke dalam kategori sentimen seperti positif, negatif, atau netral. 
-    Dalam kasus ini, kita menggunakan VADER (Valence Aware Dictionary and sEntiment Reasoner) untuk menganalisis dan memberi label 
-    sentimen pada teks yang diberikan. VADER adalah alat analisis sentimen berbasis leksikon dan aturan yang dirancang khusus 
-    untuk media sosial.
-    <br><br>Berikut adalah langkah-langkah dalam proses pelabelan menggunakan VADER:
-    <ol>
-        <li><strong>Preprocessing Teks:</strong> Langkah pertama melibatkan preprocessing teks seperti case folding, 
-        penghapusan tanda baca, dan tokenisasi. Namun, VADER dapat bekerja dengan baik pada teks mentah tanpa preprocessing ekstensif.</li>
-        <li><strong>Analisis Sentimen:</strong> VADER menghitung skor sentimen dari teks. Skor ini mencakup:
-            <ul>
-                <li><strong>Positive:</strong> Skor untuk konten positif dalam teks.</li>
-                <li><strong>Negative:</strong> Skor untuk konten negatif dalam teks.</li>
-                <li><strong>Compound:</strong> Skor keseluruhan yang merupakan agregat dari skor positif, negatif, dan netral, 
-                yang telah dinormalisasi menjadi nilai antara -1 (sangat negatif) dan +1 (sangat positif).</li>
-            </ul>
-        </li>
-        <li><strong>Pemberian Label:</strong> Berdasarkan skor compound, teks diberi label sebagai positif, negatif, atau netral:
-            <ul>
-                <li><strong>Positive:</strong> Jika skor compound ≥ 0.05</li>
-                <li><strong>Negative:</strong> Jika skor compound ≤ -0.05</li>
-            </ul>
-        </li>
-    </ol>
-    </div>
-    """, unsafe_allow_html=True)
-
-    user_input = st.text_area("Masukkan teks untuk analisis sentimen VADER:")
-
-    if user_input:
-        translated_text = translate_text(user_input)
-
-        if st.button("Analisis Sentimen"):
-            sentiment = vader_sentiment(translated_text)
-            st.write(f"Sentimen: {sentiment}")
-            
-        if st.button("Tampilkan Skor VADER"):
-            scores = sid.polarity_scores(translated_text)
-            st.write(scores)
